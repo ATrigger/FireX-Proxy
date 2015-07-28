@@ -63,29 +63,32 @@ var ProxyAddonBar = {
         });
     },
     chooseProxy: function (event) {
-        var document_checkboxes = document.getElementsByClassName('checkbox-square');
-        if (document_checkboxes.length) {
-            for (var j = 0; j < document_checkboxes.length; j++) {
-                var this_class = document_checkboxes[j].getAttribute('class');
-                if (this_class.indexOf('active') != -1) {
-                    document_checkboxes[j].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
-                    break;
+        var proxy_list = document.getElementById('proxy-list-box');
+        if (proxy_list) {
+            var hbox_elements = proxy_list.childNodes;
+
+            if (hbox_elements) {
+                for (var i = 0; i < hbox_elements.length; i++) {
+                    if (hbox_elements[i].className == 'active') {
+                        var checkBox = hbox_elements[i].getElementsByClassName('checkbox-square');
+
+                        if (checkBox.length) {
+                            var this_class = checkBox[0].getAttribute('class');
+                            if (this_class.indexOf('active') != -1) {
+                                checkBox[0].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
+                            }
+                        }
+
+                        if (hbox_elements[i] == event.currentTarget) break;
+
+                        hbox_elements[i].removeAttribute('class');
+                        break;
+                    }
                 }
             }
         }
 
         if (!event.currentTarget.className.length) {
-            var elements = document.getElementsByClassName('proxy-list')[0].childNodes;
-
-            if (elements != undefined) {
-                for (var i = elements.length - 1; i >= 0; --i) {
-                    if (elements[i].className == 'active') {
-                        elements[i].className = '';
-                        break;
-                    }
-                }
-            }
-
             event.currentTarget.setAttribute('class', 'active');
             var checkBox = event.currentTarget.getElementsByClassName('checkbox-square');
             if (checkBox.length) {
@@ -121,9 +124,20 @@ var ProxyAddonBar = {
         this.parseProxyList(function (ip_addr) {
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
+
+            if (!ip_addr.length) {
+                document.getElementById('proxy-message').innerHTML = self.stringBundle.getString('didntRespond');
+            }
         });
 
         document.getElementById('proxy-message').style.display = 'none';
+        var doc_box = document.getElementById('proxy-list-box');
+        if (doc_box) {
+            var list_class = doc_box.getAttribute('class');
+            if (list_class.indexOf('loading') == -1) {
+                doc_box.setAttribute('class', list_class + ' ' + 'loading');
+            }
+        }
     },
     getIPAddress: function () {
         return this.proxyManager.proxyData.enabled ? this.proxyManager.proxyData.address : this.stringBundle.getString('proxyIsDisabled');
@@ -277,6 +291,14 @@ var ProxyAddonBar = {
                     }
 
                     callback(ip_addr);
+                }
+
+                var doc_box = document.getElementById('proxy-list-box');
+                if (doc_box) {
+                    var list_class = doc_box.getAttribute('class');
+                    if (list_class.indexOf('loading') != -1) {
+                        doc_box.setAttribute('class', list_class.substring(0, list_class.indexOf('loading') - 1));
+                    }
                 }
             }
         };

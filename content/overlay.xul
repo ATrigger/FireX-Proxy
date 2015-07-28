@@ -15,7 +15,7 @@
                 <html:div class="proxy-list" id="proxy-list-box"></html:div>
                 <html:div>
                     <html:div>
-                        <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">
+                        <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();">
                             <image src="chrome://FireX/skin/icons/icon-refresh.png" />
                         </button>
                     </html:div>

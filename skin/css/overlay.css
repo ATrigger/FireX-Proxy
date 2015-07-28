@@ -37,6 +37,9 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	margin: 10px 0 10px 0;
 	text-align: left;
 }
+.proxy-list.loading {
+	background: url(../icons/loading.gif) no-repeat center center;
+}
 .proxy-refresh-button {
 	padding: 15px;
 	border: none;
@@ -87,13 +90,7 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 #proxy-list-panel label, #proxy-list-panel button {
 	-moz-margin-start: 0 !important;
 	margin: 0 !important;
-}
-#proxy-list-panel button:focus, #proxy-list-panel button:active {
-	outline: none;
-}
-#proxy-list-panel button::-moz-focus-inner {
-	border: 0;
-	outline: none;
+	outline: none !important;
 }
 .checkbox-square {
 	border: 1px solid #CCCCCC;
