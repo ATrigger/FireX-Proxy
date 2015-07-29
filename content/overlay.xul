@@ -14,18 +14,18 @@
                 <html:div id="proxy-message">&is_empty;</html:div>
                 <html:div class="proxy-list" id="proxy-list-box"></html:div>
                 <html:div>
-                    <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();">
+                    <button class="proxy-refresh-button" oncommand="com.firexProxyPackage.refresh();">
                         <image src="chrome://FireX/skin/icons/icon-refresh.png" />
                     </button>
                 </html:div>
             </html:div>
         </panel>
-        <panel id="settings-panel" width="400" type="arrow" onpopupshown="ProxyAddonBar.renderSettings();">
+        <panel id="settings-panel" width="400" type="arrow" onpopupshown="com.firexProxyPackage.renderSettings();">
             <html:div id="settings-wrapper">
                 <html:div id="templates-list"></html:div>
                 <html:input class="settings-input" placeholder="mozilla.org" />
                 <html:div style="width: 400px;">
-                    <button class="add-template-button" oncommand="ProxyAddonBar.refresh();">
+                    <button class="add-template-button" oncommand="com.firexProxyPackage.refresh();">
                         <image src="chrome://FireX/skin/icons/icon-ok.png" />
                     </button>
                 </html:div>
@@ -35,11 +35,11 @@
 	<toolbarpalette id="BrowserToolbarPalette">
 		<toolbarbutton type="menu-button" id="proxy-toolbar-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
 			<menupopup>
-				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-activate.png" label="&activate;" oncommand="ProxyAddonBar.activate();"/>
-                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-list.png" label="&proxy-list;" oncommand="ProxyAddonBar.openList();" />
-                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-web.png" label="&templates;" oncommand="ProxyAddonBar.openSettings();" />
-                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-reset.png" label="&reset;" oncommand="ProxyAddonBar.disable();"/>
-				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-ping.png" label="&ping;" oncommand="ProxyAddonBar.ping();"/>
+				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-activate.png" label="&activate;" oncommand="com.firexProxyPackage.activate();"/>
+                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-list.png" label="&proxy-list;" oncommand="com.firexProxyPackage.openList();" />
+                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-web.png" label="&templates;" oncommand="com.firexProxyPackage.openSettings();" />
+                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-reset.png" label="&reset;" oncommand="com.firexProxyPackage.disable();"/>
+				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-ping.png" label="&ping;" oncommand="com.firexProxyPackage.ping();"/>
 			</menupopup>
 		</toolbarbutton>
 		<toolbaritem id="ip-address">

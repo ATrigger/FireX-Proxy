@@ -1,6 +1,7 @@
-if (typeof wrapper == 'undefined') var wrapper = {};
+if (!com) var com = {};
+if (!com.firexProxyPackage) com.firexProxyPackage = {};
 
-var ProxyAddonBar = {
+com.firexProxyPackage = {
     PING_TIMES: 10, // const
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
@@ -147,38 +148,38 @@ var ProxyAddonBar = {
     },
     pingLogic: function (callback) {
         var self = this;
-        wrapper.req = new XMLHttpRequest();
-        wrapper.win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-        wrapper.pinged = 0;
-        wrapper.isCompleted = false;
-        wrapper.win.onload = function () {
-            wrapper.win.document.getElementById('loading_description').value = self.stringBundle.getString('waitCheckSpeed');
+        var req = new XMLHttpRequest();
+        var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
+        var pinged = 0;
+        var isCompleted = false;
+        win.onload = function () {
+            win.document.getElementById('loading_description').value = self.stringBundle.getString('waitCheckSpeed');
         };
 
         var interval = setInterval(function () {
-            wrapper.win.document.getElementById('loading_description').value = self.stringBundle.getString('doneSeconds') + ': ' + parseInt(self.PING_TIMES - wrapper.pinged) + ' ' + self.stringBundle.getString('seconds');
+            win.document.getElementById('loading_description').value = self.stringBundle.getString('doneSeconds') + ': ' + parseInt(self.PING_TIMES - pinged) + ' ' + self.stringBundle.getString('seconds');
 
-            if (wrapper.pinged >= self.PING_TIMES) {
-                wrapper.win.close();
+            if (pinged >= self.PING_TIMES) {
+                win.close();
                 clearInterval(interval);
-                wrapper.isCompleted = true;
-                return callback(wrapper.pinged);
+                isCompleted = true;
+                return callback(pinged);
             }
 
-            wrapper.pinged++;
+            pinged++;
         }, 1000);
 
-        wrapper.req.open('GET', 'http://www.mozilla.org/', true);
-        wrapper.req.onreadystatechange = function () {
-            if (wrapper.req.readyState == 4) {
-                wrapper.win.close();
+        req.open('GET', 'http://www.mozilla.org/', true);
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                win.close();
                 clearInterval(interval);
-                if (!wrapper.isCompleted) {
-                    callback(wrapper.pinged);
+                if (!isCompleted) {
+                    callback(pinged);
                 }
             }
         };
-        wrapper.req.send(null);
+        req.send(null);
     },
     addItemsToProxyList: function () {
         for (var i = 0; i < this.proxyList.length; i++) {
@@ -333,84 +334,84 @@ var ProxyAddonBar = {
     },
     addProxyItem: function (value, port, country, type) {
         var self = this;
-        wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-        wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
-        wrapper.hbox.addEventListener('click', function (evt) {
+        var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+        var hbox = document.createElementNS(xulNS, 'hbox');
+        hbox.addEventListener('click', function (evt) {
             self.chooseProxy(evt);
         }, false);
 
-        wrapper.checkbox = document.createElementNS('http://www.w3.org/1999/xhtml', 'html:div');
-        wrapper.checkbox.setAttribute('class', 'checkbox-square');
+        var checkbox = document.createElementNS('http://www.w3.org/1999/xhtml', 'html:div');
+        checkbox.setAttribute('class', 'checkbox-square');
 
-        wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.element.setAttribute('class', 'proxy-address');
-        wrapper.element.setAttribute('value', value);
-        wrapper.element.setAttribute('data-port', port);
+        var element = document.createElementNS(xulNS, 'label');
+        element.setAttribute('class', 'proxy-address');
+        element.setAttribute('value', value);
+        element.setAttribute('data-port', port);
 
-        wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.el_country.textContent = country;
-        wrapper.el_country.setAttribute('class', 'proxy-country');
+        var el_country = document.createElementNS(xulNS, 'label');
+        el_country.textContent = country;
+        el_country.setAttribute('class', 'proxy-country');
 
-        wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.el_type.textContent = type.toUpperCase();
-        wrapper.el_type.setAttribute('class', 'proxy-type');
+        var el_type = document.createElementNS(xulNS, 'label');
+        el_type.textContent = type.toUpperCase();
+        el_type.setAttribute('class', 'proxy-type');
 
-        document.getElementById('proxy-list-box').appendChild(wrapper.hbox);
-        wrapper.hbox.appendChild(wrapper.checkbox);
-        wrapper.hbox.appendChild(wrapper.element);
-        wrapper.hbox.appendChild(wrapper.el_type);
-        wrapper.hbox.appendChild(wrapper.el_country);
+        document.getElementById('proxy-list-box').appendChild(hbox);
+        hbox.appendChild(checkbox);
+        hbox.appendChild(element);
+        hbox.appendChild(el_type);
+        hbox.appendChild(el_country);
     },
     addTemplate: function (template) {
         var self = this;
-        wrapper.w3c = 'http://www.w3.org/1999/xhtml';
-        wrapper.settingsTemplate = document.createElementNS(wrapper.w3c, 'html:div');
-        wrapper.settingsTemplate.setAttribute('class', 'settings-template');
+        var w3c = 'http://www.w3.org/1999/xhtml';
+        var settingsTemplate = document.createElementNS(w3c, 'html:div');
+        settingsTemplate.setAttribute('class', 'settings-template');
 
-        wrapper.wrap_template = document.createElementNS(wrapper.w3c, 'html:div');
-        wrapper.wrap_template.style.float = 'left';
+        var wrap_template = document.createElementNS(w3c, 'html:div');
+        wrap_template.style.float = 'left';
 
-        wrapper.square_tmp = document.createElementNS(wrapper.w3c, 'html:div');
-        wrapper.square_tmp.setAttribute('class', 'checkbox-square active');
+        var square_tmp = document.createElementNS(w3c, 'html:div');
+        square_tmp.setAttribute('class', 'checkbox-square active');
 
-        wrapper.image_tmp = document.createElementNS(wrapper.w3c, 'html:img');
-        wrapper.image_tmp.setAttribute('src', 'chrome://FireX/skin/icons/icon-remove.png');
-        wrapper.image_tmp.setAttribute('alt', 'rm');
-        wrapper.image_tmp.setAttribute('id', 'rm' + Math.random() * Math.pow(2, 31));
+        var image_tmp = document.createElementNS(w3c, 'html:img');
+        image_tmp.setAttribute('src', 'chrome://FireX/skin/icons/icon-remove.png');
+        image_tmp.setAttribute('alt', 'rm');
+        image_tmp.setAttribute('id', 'rm' + Math.random() * Math.pow(2, 31));
 
-        wrapper.image_tmp.addEventListener('click', function () {
+        image_tmp.addEventListener('click', function () {
             self.removeTemplate(template, this.getAttribute('id'));
         }, false);
 
-        wrapper.textNode_tmp = document.createTextNode(template);
+        var textNode_tmp = document.createTextNode(template);
 
-        wrapper.wrap_template.appendChild(wrapper.square_tmp);
-        wrapper.wrap_template.appendChild(wrapper.textNode_tmp);
+        wrap_template.appendChild(square_tmp);
+        wrap_template.appendChild(textNode_tmp);
 
-        wrapper.settingsTemplate.appendChild(wrapper.wrap_template);
-        wrapper.settingsTemplate.appendChild(wrapper.image_tmp);
+        settingsTemplate.appendChild(wrap_template);
+        settingsTemplate.appendChild(image_tmp);
 
         var template_list = document.getElementById('templates-list');
         if (template_list) {
-            template_list.appendChild(wrapper.settingsTemplate);
+            template_list.appendChild(settingsTemplate);
         }
     }
 };
 
-ProxyAddonBar.proxyManager = new ProxyManager();
+com.firexProxyPackage.proxyManager = new ProxyManager();
 new FileReader().fileDescriptor().readAll(function (data) {
     if (data) {
-        ProxyAddonBar.proxyManager.uriList = data;
+        com.firexProxyPackage.proxyManager.uriList = data;
     }
 });
 
 window.addEventListener("load", function (e) {
-    ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));
+    com.firexProxyPackage.onLoad(document.getElementById('firex-string-bundle'));
 
     var ip_address = document.getElementById('ip-address');
 
     if (ip_address) {
-        ip_address.children[0].value = ProxyAddonBar.getIPAddress();
-        ProxyAddonBar.ip_address = ip_address;
+        ip_address.children[0].value = com.firexProxyPackage.getIPAddress();
+        com.firexProxyPackage.ip_address = ip_address;
     }
 }, false);
