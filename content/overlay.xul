@@ -22,6 +22,11 @@
         </panel>
         <panel id="settings-panel" width="400" type="arrow" onpopupshown="com.firexProxyPackage.renderSettings();">
             <html:div id="settings-wrapper">
+                <html:div id="enable-templates">
+                    <html:div id="tmpl-block">
+                        <html:div class="checkbox-square" id="tmpl-enable"></html:div>&enableTemplates;
+                    </html:div>
+                </html:div>
                 <html:div id="templates-list"></html:div>
                 <html:input class="settings-input" id="template-input" placeholder="mozilla.org" />
                 <html:div style="width: 400px;">

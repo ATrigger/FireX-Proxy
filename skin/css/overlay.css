@@ -1,3 +1,7 @@
+@font-face {
+	font-family: RobotoMedium;
+	src: url('../fonts/Roboto-Medium.ttf');
+}
 #proxy-toolbar-button {
   list-style-image: url("../icons/icon-16.png");
 }
@@ -83,6 +87,7 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	display: inline-block;
 	margin-right: 8px;
 	vertical-align: -4px;
+	cursor: pointer;
 }
 .checkbox-square.active {
 	background: url('../icons/icon-checked.png') center center no-repeat #78C0BD;
@@ -123,4 +128,20 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 #settings-panel #templates-list {
 	max-height: 200px;
 	overflow-y: auto;
+}
+#settings-panel #enable-templates {
+	margin-top: 10px;
+}
+#settings-panel #enable-templates::after {
+	content: ' ';
+	display: block;
+	clear: both;
+}
+#settings-panel #enable-templates #tmpl-block {
+	float: right;
+	margin-right: 18px;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-family: 'RobotoMedium', sans-serif;
+	color: #585858;
 }

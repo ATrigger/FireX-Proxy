@@ -17,7 +17,7 @@ FileReader.prototype = {
             var converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].
                 createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
             converter.charset = "UTF-8";
-            var istream = converter.convertToInputStream(string);
+            var istream = converter.convertToInputStream(string + '\n');
             NetUtil.asyncCopy(istream, ostream, function (status) {
                 if (!Components.isSuccessCode(status)) {
                     return;

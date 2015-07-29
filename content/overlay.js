@@ -193,7 +193,7 @@ com.firexProxyPackage = {
         if (template_list) {
             if (!template_list.childNodes.length) {
                 for (var i = 0; i < this.proxyManager.uriList.length; i++) {
-                    this.addTemplate(this.proxyManager.uriList[i]);
+                    if (this.proxyManager.uriList[i].length) this.addTemplate(this.proxyManager.uriList[i]);
                 }
             }
         }
@@ -220,6 +220,16 @@ com.firexProxyPackage = {
 
                 tmpl_input.value = '';
             }
+        }
+    },
+    enableTemplates: function (checkBox) {
+        var checkBox_class = checkBox.getAttribute('class');
+        if (checkBox_class.indexOf('active') != -1) {
+            checkBox.setAttribute('class', checkBox_class.substring(0, checkBox_class.indexOf('active') - 1));
+            this.proxyManager.templateEnabled = false;
+        } else {
+            checkBox.setAttribute('class', checkBox_class + ' ' + 'active');
+            this.proxyManager.templateEnabled = true;
         }
     },
     newTemplate: function (tmpl) {
@@ -417,9 +427,16 @@ window.addEventListener("load", function (e) {
     com.firexProxyPackage.onLoad(document.getElementById('firex-string-bundle'));
 
     var ip_address = document.getElementById('ip-address');
+    var tmplEnable = document.getElementById('tmpl-enable');
 
     if (ip_address) {
         ip_address.children[0].value = com.firexProxyPackage.getIPAddress();
         com.firexProxyPackage.ip_address = ip_address;
+    }
+
+    if (tmplEnable) {
+        tmplEnable.addEventListener('click', function () {
+            com.firexProxyPackage.enableTemplates(this);
+        });
     }
 }, false);
