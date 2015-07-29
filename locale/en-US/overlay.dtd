@@ -5,5 +5,5 @@
 <!ENTITY ping "Check connection speed">
 <!ENTITY proxy_off "Proxy is disabled">
 <!ENTITY proxy-list "Proxy list">
-<!ENTITY is_empty "Proxy list is empty.">
-<!ENTITY didntRespond "The server didn't respond. Please try again later.">
+<!ENTITY is_empty "Proxy list is empty">
+<!ENTITY didntRespond "The server didn't respond. Please try again later">

@@ -111,7 +111,7 @@ var ProxyAddonBar = {
 
                 if (hbox_child.length && proxy_type.length) {
                     this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].innerHTML.toLowerCase());
-                    document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+                    document.getElementById('ip-address').children[0].value = this.getIPAddress();
                 }
                 break;
             }
@@ -190,33 +190,33 @@ var ProxyAddonBar = {
 
         while (proxy_list.firstChild) proxy_list.removeChild(proxy_list.firstChild);
     },
-    addProxyItem: function (value, port, country, type) {
-        var self = this;
-        wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-        wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
-        wrapper.checkbox = document.createElementNS('http://www.w3.org/1999/xhtml', 'html:div');
-        wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
-        wrapper.checkbox.setAttribute('class', 'checkbox-square');
-        wrapper.element.setAttribute('class', 'proxy-address');
-        wrapper.element.setAttribute('value', value);
-        wrapper.element.setAttribute('data-port', port);
+    renderSettings: function () {
+        var template_list = document.getElementById('templates-list');
+        if (template_list) {
+            if (!template_list.childNodes.length) {
+                for (var i = 0; i < this.proxyManager.uriList.length; i++) {
+                    this.addTemplate(this.proxyManager.uriList[i]);
+                }
+            }
+        }
+    },
+    removeTemplate: function (tmpl, uniqueId) {
+        if (this.proxyManager.uriList.length) {
+            var uriIndex = this.proxyManager.uriList.indexOf(tmpl);
+            if (uriIndex != -1) {
+                var unEl = document.getElementById(uniqueId);
 
-        wrapper.hbox.addEventListener('click', function (e) {
-            self.chooseProxy(e);
-        }, false);
+                if (unEl) document.getElementById('templates-list').removeChild(unEl.parentNode);
 
-        wrapper.el_country.textContent = country;
-        wrapper.el_country.setAttribute('class', 'proxy-country');
-        wrapper.el_type.textContent = type.toUpperCase();
-        wrapper.el_type.setAttribute('class', 'proxy-type');
-
-        document.getElementById('proxy-list-box').appendChild(wrapper.hbox);
-        wrapper.hbox.appendChild(wrapper.checkbox);
-        wrapper.hbox.appendChild(wrapper.element);
-        wrapper.hbox.appendChild(wrapper.el_type);
-        wrapper.hbox.appendChild(wrapper.el_country);
+                this.proxyManager.uriList.splice(uriIndex, 1);
+                new FileReader().fileDescriptor().removeLine(tmpl);
+            }
+        }
+    },
+    newTemplate: function (tmpl) {
+        new FileReader().fileDescriptor().write(tmpl, true);
+        this.proxyManager.uriList.push(tmpl);
+        this.addTemplate(tmpl);
     },
     parseProxyList: function (callback) {
         var req = new XMLHttpRequest();
@@ -307,6 +307,9 @@ var ProxyAddonBar = {
     openList: function () {
         this.openPopup('proxy-list-panel');
     },
+    openSettings: function () {
+        this.openPopup('settings-panel');
+    },
     openPopup: function (str_element) {
         var panel = document.getElementById(str_element);
         if (panel) {
@@ -327,6 +330,70 @@ var ProxyAddonBar = {
         }
 
         return firstRun;
+    },
+    addProxyItem: function (value, port, country, type) {
+        var self = this;
+        wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+        wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
+        wrapper.hbox.addEventListener('click', function (evt) {
+            self.chooseProxy(evt);
+        }, false);
+
+        wrapper.checkbox = document.createElementNS('http://www.w3.org/1999/xhtml', 'html:div');
+        wrapper.checkbox.setAttribute('class', 'checkbox-square');
+
+        wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.element.setAttribute('class', 'proxy-address');
+        wrapper.element.setAttribute('value', value);
+        wrapper.element.setAttribute('data-port', port);
+
+        wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.el_country.textContent = country;
+        wrapper.el_country.setAttribute('class', 'proxy-country');
+
+        wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.el_type.textContent = type.toUpperCase();
+        wrapper.el_type.setAttribute('class', 'proxy-type');
+
+        document.getElementById('proxy-list-box').appendChild(wrapper.hbox);
+        wrapper.hbox.appendChild(wrapper.checkbox);
+        wrapper.hbox.appendChild(wrapper.element);
+        wrapper.hbox.appendChild(wrapper.el_type);
+        wrapper.hbox.appendChild(wrapper.el_country);
+    },
+    addTemplate: function (template) {
+        var self = this;
+        wrapper.w3c = 'http://www.w3.org/1999/xhtml';
+        wrapper.settingsTemplate = document.createElementNS(wrapper.w3c, 'html:div');
+        wrapper.settingsTemplate.setAttribute('class', 'settings-template');
+
+        wrapper.wrap_template = document.createElementNS(wrapper.w3c, 'html:div');
+        wrapper.wrap_template.style.float = 'left';
+
+        wrapper.square_tmp = document.createElementNS(wrapper.w3c, 'html:div');
+        wrapper.square_tmp.setAttribute('class', 'checkbox-square active');
+
+        wrapper.image_tmp = document.createElementNS(wrapper.w3c, 'html:img');
+        wrapper.image_tmp.setAttribute('src', 'chrome://FireX/skin/icons/icon-remove.png');
+        wrapper.image_tmp.setAttribute('alt', 'rm');
+        wrapper.image_tmp.setAttribute('id', 'rm' + Math.random() * Math.pow(2, 31));
+
+        wrapper.image_tmp.addEventListener('click', function () {
+            self.removeTemplate(template, this.getAttribute('id'));
+        }, false);
+
+        wrapper.textNode_tmp = document.createTextNode(template);
+
+        wrapper.wrap_template.appendChild(wrapper.square_tmp);
+        wrapper.wrap_template.appendChild(wrapper.textNode_tmp);
+
+        wrapper.settingsTemplate.appendChild(wrapper.wrap_template);
+        wrapper.settingsTemplate.appendChild(wrapper.image_tmp);
+
+        var template_list = document.getElementById('templates-list');
+        if (template_list) {
+            template_list.appendChild(wrapper.settingsTemplate);
+        }
     }
 };
 
