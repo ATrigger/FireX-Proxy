@@ -231,6 +231,8 @@ com.firexProxyPackage = {
             checkBox.setAttribute('class', checkBox_class + ' ' + 'active');
             this.proxyManager.templateEnabled = true;
         }
+
+        this.prefs.setBoolPref('extensions.firex.enableTemplates', this.proxyManager.templateEnabled);
     },
     newTemplate: function (tmpl) {
         new FileReader().fileDescriptor().write(tmpl, true);
@@ -435,5 +437,7 @@ window.addEventListener("load", function (e) {
         tmplEnable.addEventListener('click', function () {
             com.firexProxyPackage.enableTemplates(this);
         });
+
+        if (com.firexProxyPackage.prefs.getBoolPref('extensions.firex.enableTemplates')) tmplEnable.click();
     }
 }, false);
