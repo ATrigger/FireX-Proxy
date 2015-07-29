@@ -42,7 +42,7 @@ FileReader.prototype = {
             var temp_array = [];
             if (data) {
                 for (var i = data.length - 1; i >= 0; --i) {
-                    if (data[i] == string) continue;
+                    if (data[i] == string || !data[i].length) continue;
                     temp_array.unshift(data[i]);
                 }
 

@@ -388,9 +388,7 @@ com.firexProxyPackage = {
 
         var wrap_template = document.createElementNS(w3c, 'html:div');
         wrap_template.style.float = 'left';
-
-        var square_tmp = document.createElementNS(w3c, 'html:div');
-        square_tmp.setAttribute('class', 'checkbox-square active');
+        wrap_template.setAttribute('class', 'list-style-arrow');
 
         var image_tmp = document.createElementNS(w3c, 'html:img');
         image_tmp.setAttribute('src', 'chrome://FireX/skin/icons/icon-remove.png');
@@ -403,7 +401,6 @@ com.firexProxyPackage = {
 
         var textNode_tmp = document.createTextNode(template);
 
-        wrap_template.appendChild(square_tmp);
         wrap_template.appendChild(textNode_tmp);
 
         settingsTemplate.appendChild(wrap_template);

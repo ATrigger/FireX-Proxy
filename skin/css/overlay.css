@@ -145,3 +145,8 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	font-family: 'RobotoMedium', sans-serif;
 	color: #585858;
 }
+.list-style-arrow {
+	background: url("../icons/icon-list-arrow.png") no-repeat;
+	padding-left: 20px;
+	margin-left: -8px;
+}
