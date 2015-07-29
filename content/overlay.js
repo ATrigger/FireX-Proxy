@@ -148,10 +148,9 @@ com.firexProxyPackage = {
     },
     pingLogic: function (callback) {
         var self = this;
-        var req = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
         var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
         var pinged = 0;
-        var isCompleted = false;
         win.onload = function () {
             win.document.getElementById('loading_description').value = self.stringBundle.getString('waitCheckSpeed');
         };
@@ -162,24 +161,22 @@ com.firexProxyPackage = {
             if (pinged >= self.PING_TIMES) {
                 win.close();
                 clearInterval(interval);
-                isCompleted = true;
+                xhr.abort();
                 return callback(pinged);
             }
 
             pinged++;
         }, 1000);
 
-        req.open('GET', 'http://www.mozilla.org/', true);
-        req.onreadystatechange = function () {
-            if (req.readyState == 4) {
+        xhr.open('GET', 'http://www.mozilla.org/', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
                 win.close();
                 clearInterval(interval);
-                if (!isCompleted) {
-                    callback(pinged);
-                }
+                callback(pinged);
             }
         };
-        req.send(null);
+        xhr.send(null);
     },
     addItemsToProxyList: function () {
         for (var i = 0; i < this.proxyList.length; i++) {
@@ -211,6 +208,17 @@ com.firexProxyPackage = {
 
                 this.proxyManager.uriList.splice(uriIndex, 1);
                 new FileReader().fileDescriptor().removeLine(tmpl);
+            }
+        }
+    },
+    validateTemplate: function () {
+        var tmpl_input = document.getElementById('template-input');
+
+        if (tmpl_input) {
+            if (tmpl_input.value.length) {
+                this.newTemplate(tmpl_input.value);
+
+                tmpl_input.value = '';
             }
         }
     },

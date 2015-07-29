@@ -120,3 +120,7 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	float: right;
 	cursor: pointer;
 }
+#settings-panel #templates-list {
+	max-height: 200px;
+	overflow-y: auto;
+}

@@ -23,9 +23,9 @@
         <panel id="settings-panel" width="400" type="arrow" onpopupshown="com.firexProxyPackage.renderSettings();">
             <html:div id="settings-wrapper">
                 <html:div id="templates-list"></html:div>
-                <html:input class="settings-input" placeholder="mozilla.org" />
+                <html:input class="settings-input" id="template-input" placeholder="mozilla.org" />
                 <html:div style="width: 400px;">
-                    <button class="add-template-button" oncommand="com.firexProxyPackage.refresh();">
+                    <button class="add-template-button" oncommand="com.firexProxyPackage.validateTemplate();">
                         <image src="chrome://FireX/skin/icons/icon-ok.png" />
                     </button>
                 </html:div>
