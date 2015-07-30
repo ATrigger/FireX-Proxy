@@ -13,7 +13,7 @@ FileReader.prototype = {
     write: function (string, append) {
         append = append || false;
         if (string) {
-            var ostream = FileUtils.openFileOutputStream(this.descriptor, !append ? (0x02 | 0x08 | 0x20) : (0x02 | 0x10));
+            var ostream = FileUtils.openFileOutputStream(this.descriptor, !append ? (0x02 | 0x08 | 0x20) : (0x02 | 0x08 | 0x10));
             var converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].
                 createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
             converter.charset = "UTF-8";
