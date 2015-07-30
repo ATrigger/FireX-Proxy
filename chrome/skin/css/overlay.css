@@ -8,12 +8,11 @@
 toolbar[iconsize="small"] #proxy-toolbar-button {
     list-style-image: url("../icons/icon-16.png");
 }
+toolbar[iconsize="small"] #proxy-toolbar-button.active {
+	list-style-image: url("../icons/activeIcon-16.png");
+}
 #proxy-toolbar-button[cui-areatype="menu-panel"] {
 	list-style-image: url("../icons/icon-24.png");
-}
-#ip-address {
-	margin: 10px 15px 0 0;
-	color: #12B300;
 }
 .proxy-list {
 	height: 200px;

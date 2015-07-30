@@ -9,7 +9,7 @@
 		<stringbundle id="firex-string-bundle" src="chrome://FireX/locale/lang.properties"/>
 	</stringbundleset>
     <popupset id="mainPopupSet">
-        <panel id="proxy-list-panel" width="400" type="arrow">
+        <panel id="proxy-list-panel" width="400" type="arrow" onpopupshown="com.firexProxyPackage.listPanelShown();">
             <html:div id="proxy-wrapper" style="width: 400px;">
                 <html:div id="proxy-message">&is_empty;</html:div>
                 <html:div class="proxy-list" id="proxy-list-box"></html:div>
@@ -38,17 +38,13 @@
         </panel>
     </popupset>
 	<toolbarpalette id="BrowserToolbarPalette">
-		<toolbarbutton type="menu-button" id="proxy-toolbar-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
-			<menupopup>
-				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-activate.png" label="&activate;" oncommand="com.firexProxyPackage.activate();"/>
+        <toolbarbutton type="menu-button" id="proxy-toolbar-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
+            <menupopup>
+                <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-activate.png" label="&activate;" oncommand="com.firexProxyPackage.activate();"/>
                 <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-list.png" label="&proxy-list;" oncommand="com.firexProxyPackage.openList();" />
                 <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-web.png" label="&templates;" oncommand="com.firexProxyPackage.openSettings();" />
                 <menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-reset.png" label="&reset;" oncommand="com.firexProxyPackage.disable();"/>
-				<menuitem class="menuitem-iconic" image="chrome://FireX/skin/icons/icon-ping.png" label="&ping;" oncommand="com.firexProxyPackage.ping();"/>
-			</menupopup>
-		</toolbarbutton>
-		<toolbaritem id="ip-address">
-			<label value="&proxy_off;" />
-		</toolbaritem>
+            </menupopup>
+        </toolbarbutton>
 	</toolbarpalette>
 </overlay>

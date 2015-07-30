@@ -6,19 +6,14 @@ com.firexProxyPackage = {
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
     stringBundle: null,
-    ip_address: null,
     proxyManager: null,
 
     onLoad: function (str) {
         this.stringBundle = str;
 
         if (this.isFirstRun()) {
-            /* icon */
             this.addIcon("nav-bar", "proxy-toolbar-button");
             this.addIcon("addon-bar", "proxy-toolbar-button");
-            /* ip address */
-            this.addIcon("nav-bar", "ip-address");
-            this.addIcon("addon-bar", "ip-address");
         }
     },
     addIcon: function (toolbarId, id) {
@@ -34,28 +29,18 @@ com.firexProxyPackage = {
         }
     },
     activate: function () {
-        this.reset();
         var self = this;
         this.parseProxyList(function (ip_addr) {
             var rand_proxy = self.randomProxy(ip_addr);
             self.proxyManager.start(rand_proxy[0], rand_proxy[1], rand_proxy[3]);
-            self.setIPAddress(true);
+            self.controlIcon(true);
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
         });
     },
     disable: function () {
         this.proxyManager.stop();
-        this.reset();
-    },
-    reset: function () {
-        this.setIPAddress(true);
-    },
-    ping: function () {
-        var self = this;
-        this.pingLogic(function (times) {
-            self.setIPAddress(times < self.PING_TIMES);
-        });
+        this.controlIcon(false);
     },
     chooseProxy: function (event) {
         var proxy_list = document.getElementById('proxy-list-box');
@@ -94,6 +79,7 @@ com.firexProxyPackage = {
         } else {
             event.currentTarget.removeAttribute('class');
             this.disable();
+            this.controlIcon(false);
         }
     },
     changeProxy: function () {
@@ -105,27 +91,29 @@ com.firexProxyPackage = {
                 var proxy_type = hbox[i].getElementsByClassName('proxy-type');
                 if (hbox_child.length && proxy_type.length) {
                     this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].textContent.toLowerCase());
-                    this.setIPAddress(true);
+                    this.controlIcon(true);
                 }
                 break;
             }
         }
     },
     refresh: function () {
-        this.reset();
         this.removeProxyList();
         var self = this;
+        var proxyMessage = document.getElementById('proxy-message');
         this.parseProxyList(function (ip_addr) {
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
 
             if (!ip_addr.length) {
-                document.getElementById('proxy-message').textContent = self.stringBundle.getString('didntRespond');
+                if (proxyMessage) proxyMessage.textContent = self.stringBundle.getString('didntRespond');
             }
         });
 
-        document.getElementById('proxy-message').style.display = 'none';
+        if (proxyMessage) proxyMessage.style.display = 'none';
+
         var doc_box = document.getElementById('proxy-list-box');
+
         if (doc_box) {
             var list_class = doc_box.getAttribute('class');
             if (list_class.indexOf('loading') == -1) {
@@ -138,38 +126,6 @@ com.firexProxyPackage = {
     },
     randomProxy: function (proxy) {
         return proxy[parseInt(Math.random() * proxy.length - 1)];
-    },
-    pingLogic: function (callback) {
-        var self = this;
-        var xhr = new XMLHttpRequest();
-        var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-        var pinged = 0;
-        win.onload = function () {
-            win.document.getElementById('loading_description').value = self.stringBundle.getString('waitCheckSpeed');
-        };
-
-        var interval = setInterval(function () {
-            win.document.getElementById('loading_description').value = self.stringBundle.getString('doneSeconds') + ': ' + parseInt(self.PING_TIMES - pinged) + ' ' + self.stringBundle.getString('seconds');
-
-            if (pinged >= self.PING_TIMES) {
-                win.close();
-                clearInterval(interval);
-                xhr.abort();
-                return callback(pinged);
-            }
-
-            pinged++;
-        }, 1000);
-
-        xhr.open('GET', 'http://www.mozilla.org/', true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-                win.close();
-                clearInterval(interval);
-                callback(pinged);
-            }
-        };
-        xhr.send(null);
     },
     addItemsToProxyList: function () {
         for (var i = 0; i < this.proxyList.length; i++) {
@@ -187,6 +143,17 @@ com.firexProxyPackage = {
             if (!template_list.childNodes.length) {
                 for (var i = 0; i < this.proxyManager.uriList.length; i++) {
                     if (this.proxyManager.uriList[i].length) this.addTemplate(this.proxyManager.uriList[i]);
+                }
+            }
+        }
+    },
+    listPanelShown: function () {
+        var proxyMessage = document.getElementById('proxy-message'),
+            listNodes = document.getElementById('proxy-list-box');
+        if (proxyMessage) {
+            if (listNodes) {
+                if (listNodes.childNodes.length) {
+                    proxyMessage.style.display = 'none';
                 }
             }
         }
@@ -406,11 +373,17 @@ com.firexProxyPackage = {
             template_list.appendChild(settingsTemplate);
         }
     },
-    setIPAddress: function (hightlight) {
+    controlIcon: function (hightlight) {
         hightlight = hightlight || false;
-        if (this.ip_address) {
-            this.ip_address.children[0].value = this.getIPAddress();
-            this.ip_address.children[0].style.color = hightlight ? '#12B300' : '#B30000';
+        var extensionButton = document.getElementById('proxy-toolbar-button');
+        if (extensionButton) {
+            var extensionButton_class = extensionButton.getAttribute('class'),
+                extensionButton_index = extensionButton_class.indexOf('active');
+            if (hightlight) {
+                if (extensionButton_index == -1) extensionButton.setAttribute('class', extensionButton_class + ' ' + 'active');
+            } else {
+                if (extensionButton_index != -1) extensionButton.setAttribute('class', extensionButton_class.substring(0, extensionButton_index - 1));
+            }
         }
     }
 };
@@ -424,14 +397,7 @@ new FileReader().fileDescriptor().readAll(function (data) {
 
 window.addEventListener("load", function (e) {
     com.firexProxyPackage.onLoad(document.getElementById('firex-string-bundle'));
-
-    var ip_address = document.getElementById('ip-address');
     var tmplEnable = document.getElementById('tmpl-enable');
-
-    if (ip_address) {
-        com.firexProxyPackage.ip_address = ip_address;
-        com.firexProxyPackage.setIPAddress(true);
-    }
 
     if (tmplEnable) {
         tmplEnable.addEventListener('click', function () {
