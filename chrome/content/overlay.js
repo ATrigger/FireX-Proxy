@@ -3,6 +3,7 @@ if (!com.firexProxyPackage) com.firexProxyPackage = {};
 
 com.firexProxyPackage = {
     PING_TIMES: 10, // const
+    CURRENT_VERSION: 4.0, // const
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
     stringBundle: null,
@@ -298,16 +299,16 @@ com.firexProxyPackage = {
         }
     },
     isFirstRun: function () {
-        var firstRun = this.prefs.getBoolPref('extensions.firex.firstRun'), currentVersion = 3.8;
+        var firstRun = this.prefs.getBoolPref('extensions.firex.firstRun');
 
         if (firstRun) {
             this.prefs.setBoolPref('extensions.firex.firstRun', false);
-            this.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
-        }
-
-        if (parseFloat(this.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
-            this.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
-            return true;
+            this.prefs.setCharPref('extensions.firex.installedVersion', this.CURRENT_VERSION);
+        } else {
+            if (parseFloat(this.prefs.getCharPref('extensions.firex.installedVersion')) < this.CURRENT_VERSION) {
+                this.prefs.setCharPref('extensions.firex.installedVersion', this.CURRENT_VERSION);
+                return true;
+            }
         }
 
         return firstRun;
