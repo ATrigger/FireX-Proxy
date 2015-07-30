@@ -39,7 +39,7 @@ com.firexProxyPackage = {
         this.parseProxyList(function (ip_addr) {
             var rand_proxy = self.randomProxy(ip_addr);
             self.proxyManager.start(rand_proxy[0], rand_proxy[1], rand_proxy[3]);
-            self.ip_address.children[0].value = self.getIPAddress();
+            self.setIPAddress(true);
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
         });
@@ -49,18 +49,12 @@ com.firexProxyPackage = {
         this.reset();
     },
     reset: function () {
-        if (this.ip_address) {
-            this.ip_address.children[0].style.color = '#12B300';
-            this.ip_address.children[0].value = this.stringBundle.getString('proxyIsDisabled');
-        }
+        this.setIPAddress(true);
     },
     ping: function () {
         var self = this;
         this.pingLogic(function (times) {
-            if (self.ip_address) {
-                self.ip_address.children[0].value = self.getIPAddress();
-                self.ip_address.children[0].style.color = (times < self.PING_TIMES) ? '#12B300' : '#B30000';
-            }
+            self.setIPAddress(times < self.PING_TIMES);
         });
     },
     chooseProxy: function (event) {
@@ -71,12 +65,12 @@ com.firexProxyPackage = {
             if (hbox_elements) {
                 for (var i = 0; i < hbox_elements.length; i++) {
                     if (hbox_elements[i].className == 'active') {
-                        var checkBox = hbox_elements[i].getElementsByClassName('checkbox-square');
+                        var i_checkBox = hbox_elements[i].getElementsByClassName('checkbox-square');
 
-                        if (checkBox.length) {
-                            var this_class = checkBox[0].getAttribute('class');
+                        if (i_checkBox.length) {
+                            var this_class = i_checkBox[0].getAttribute('class');
                             if (this_class.indexOf('active') != -1) {
-                                checkBox[0].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
+                                i_checkBox[0].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
                             }
                         }
 
@@ -109,10 +103,9 @@ com.firexProxyPackage = {
             if (hbox[i].className.length) {
                 var hbox_child = hbox[i].getElementsByClassName('proxy-address');
                 var proxy_type = hbox[i].getElementsByClassName('proxy-type');
-
                 if (hbox_child.length && proxy_type.length) {
-                    this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].innerHTML.toLowerCase());
-                    document.getElementById('ip-address').children[0].value = this.getIPAddress();
+                    this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].textContent.toLowerCase());
+                    this.setIPAddress(true);
                 }
                 break;
             }
@@ -127,7 +120,7 @@ com.firexProxyPackage = {
             self.addItemsToProxyList();
 
             if (!ip_addr.length) {
-                document.getElementById('proxy-message').innerHTML = self.stringBundle.getString('didntRespond');
+                document.getElementById('proxy-message').textContent = self.stringBundle.getString('didntRespond');
             }
         });
 
@@ -412,6 +405,13 @@ com.firexProxyPackage = {
         if (template_list) {
             template_list.appendChild(settingsTemplate);
         }
+    },
+    setIPAddress: function (hightlight) {
+        hightlight = hightlight || false;
+        if (this.ip_address) {
+            this.ip_address.children[0].value = this.getIPAddress();
+            this.ip_address.children[0].style.color = hightlight ? '#12B300' : '#B30000';
+        }
     }
 };
 
@@ -429,8 +429,8 @@ window.addEventListener("load", function (e) {
     var tmplEnable = document.getElementById('tmpl-enable');
 
     if (ip_address) {
-        ip_address.children[0].value = com.firexProxyPackage.getIPAddress();
         com.firexProxyPackage.ip_address = ip_address;
+        com.firexProxyPackage.setIPAddress(true);
     }
 
     if (tmplEnable) {

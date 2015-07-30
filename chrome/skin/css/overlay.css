@@ -3,16 +3,13 @@
 	src: url('../fonts/Roboto-Medium.ttf');
 }
 #proxy-toolbar-button {
-  list-style-image: url("../icons/icon-16.png");
+    list-style-image: url("../icons/icon-24.png");
 }
 toolbar[iconsize="small"] #proxy-toolbar-button {
-  list-style-image: url("../icons/icon-16.png");
-}
-toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
-	list-style-image: url("../icons/icon-32.png");
+    list-style-image: url("../icons/icon-16.png");
 }
 #proxy-toolbar-button[cui-areatype="menu-panel"] {
-	list-style-image: url("../icons/icon-32.png");
+	list-style-image: url("../icons/icon-24.png");
 }
 #ip-address {
 	margin: 10px 15px 0 0;
