@@ -107,7 +107,10 @@ com.firexProxyPackage = {
             self.addItemsToProxyList();
 
             if (!ip_addr.length) {
-                if (proxyMessage) proxyMessage.textContent = self.stringBundle.getString('didntRespond');
+                if (proxyMessage) {
+                    proxyMessage.textContent = self.stringBundle.getString('didntRespond');
+                    proxyMessage.style.display = 'block';
+                }
             }
         });
 
