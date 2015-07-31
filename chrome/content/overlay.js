@@ -276,7 +276,7 @@ com.firexProxyPackage = {
                     }
 
                     callback(ip_addr);
-                }
+                } else callback([]);
 
                 var doc_box = document.getElementById('proxy-list-box');
                 if (doc_box) {
