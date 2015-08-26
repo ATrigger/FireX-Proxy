@@ -21,6 +21,8 @@ ProxyManager.prototype = {
                 if (self.proxyData.enabled) {
                     if (self.templateEnabled && self.uriList.length) {
                         for (var i = self.uriList.length - 1; i >= 0; --i) {
+                            if (!self.uriList[i].length) continue;
+
                             if (uri.spec.indexOf(self.uriList[i]) != -1) {
                                 return self.services.proxyService.newProxyInfo('http', self.proxyData.address, self.proxyData.port, 0, null, null);
                             }
