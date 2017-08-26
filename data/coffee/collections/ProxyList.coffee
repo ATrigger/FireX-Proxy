@@ -6,3 +6,15 @@ class ProxyList extends Backbone.Collection
 
   initialize: ->
     @port = 'favorite'
+
+  byCountry: (countryName) ->
+    new this(
+      this.where
+        country: countryName
+    )
+
+  byProtocol: (protocolName) ->
+    new this(
+      this.where
+        originalProtocol: protocolName
+    )

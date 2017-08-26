@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <script src="../bower/jquery/dist/jquery.min.js" type="text/javascript"></script>
-    <script src="../bower/polyglot/build/polyglot.min.js" type="text/javascript"></script>
+    <script src="../bower/i18next/i18next.min.js" type="text/javascript"></script>
     <script src="../bower/underscore/underscore-min.js" type="text/javascript"></script>
     <script src="../bower/backbone/backbone.js" type="text/javascript"></script>
     <script src="../bower/backbone.validation/dist/backbone-validation-min.js" type="text/javascript"></script>
+    <script src="../bower/select2/dist/js/select2.min.js"></script>
     <script src="../build/all.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
+    <link rel="stylesheet" type="text/css" href="../build/overlay.css">
+    <link rel="stylesheet" type="text/css" href="../bower/select2/dist/css/select2.min.css">
 </head>
 <body>
 <div id="menu"></div>
 <div id="primary-content"></div>
 <!-- MENU TEMPLATE -->
 <script type="text/template" id="menu-entry-template">
-    <i class="<%- iIcon %>"></i>
-    <% if (iActive) { %>
-        <%- iText %>
+    <i class="<%- icon %>"></i>
+    <% if (isActive) { %>
+        <%- placeholder %>
     <% } %>
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
-    <div class="h-manage">
-        <% if (!hCheckbox) { %>
-        <div class="checkbox-square"></div>
+    <div class="right-panel">
+        <i class="filter"></i>
+        <% if (!isFavoriteEnabled) { %>
+        <div class="checkbox"></div>
         <% } else { %>
-        <div class="checkbox-square active"></div>
+        <div class="checkbox active"></div>
         <% } %>
-        <%- l10n.t("favorites", {_:"Show favorites"}) %>
+        <%- i18next.t('favorites') %>
     </div>
     <div id="proxy-content">
-        <div class="h-max">
-            <div class="h-box">
-                <table id="proxy-list-box"></table>
-            </div>
+        <div class="content-wrapper">
+            <div class="filters"></div>
+            <table id="proxy-list-box"></table>
         </div>
         <button class="bottom-button refresh"></button>
     </div>
@@ -42,7 +44,7 @@
 <!-- LIST TEMPLATE -->
 <script type="text/template" id="server-template">
     <td class="favorite">
-        <div class="checkbox-square star"></div>
+        <div class="checkbox star"></div>
     </td>
     <td><%- ipAddress %></td>
     <td><%- originalProtocol %></td>
@@ -51,12 +53,9 @@
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
     <% if (!editingState) { %>
-        <div class="d-uri"><%- address %></div>
-        <i class="editable"></i>
+        <div class="address"><%- address %></div>
     <% } %>
-    <button class="d-rm">
-        <i class="rm-button"></i>
-    </button>
+    <i class="remove"></i>
     <% if (editingState) { %>
         <div class="validation">
             <input class="edit" type="text" value="<%- address %>" name="address"/>
@@ -66,15 +65,15 @@
 </script>
 <!-- PATTERN PAGE TEMPLATE -->
 <script type="text/template" id="pattern-page-template">
-    <div class="h-manage">
-        <% if (!bCheckbox) { %>
-        <div class="checkbox-square"></div>
+    <div class="right-panel">
+        <% if (!isBlacklistEnabled) { %>
+        <div class="checkbox"></div>
         <% } else { %>
-        <div class="checkbox-square active"></div>
+        <div class="checkbox active"></div>
         <% } %>
-        <%- l10n.t("blacklist", {_:"Blacklist"}) %>
+        <%- i18next.t('blacklist') %>
     </div>
-    <div class="h-max"></div>
+    <div class="content-wrapper"></div>
     <div id="pattern-add-subview"></div>
 </script>
 <!-- PATTERN ADD TEMPLATE -->

@@ -7,7 +7,6 @@ const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
 const { JsonReader }      = require('./JsonReader.js');
 const { Template }        = require('./Template.js');
-const locale              = require('sdk/l10n/locale');
 const self                = require('sdk/self');
 
 const panel = Panel({
@@ -36,12 +35,6 @@ const proxyStream     = new JsonReader('firex-proxy');
 const templateManager = new TemplateManager(templatesStream);
 const connector       = new Connector(templateManager);
 const favoriteManager = new FavoriteManager(proxyStream);
-
-panel.on('show', () => {
-    let preferedLocales = locale.getPreferedLocales(true).shift();
-
-    panel.port.emit('onLocaleResponse', preferedLocales.split('-').shift());
-});
 
 panel.port
     .on("connect", (server) =>

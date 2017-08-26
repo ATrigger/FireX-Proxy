@@ -4,7 +4,7 @@ class ListView extends Backbone.View
     @listenTo @collection, 'change:favoriteState', @onChange
     @listenTo @collection, 'change:activeState', @onStateChange
 
-    @listenTo @model, 'change:hCheckbox', @onCheckboxChange
+    @listenTo @model, 'change:isFavoriteEnabled', @onCheckboxChange
     @listenTo @model, 'change:refreshProcess', @onRefreshProcess
 
     addon.port.on 'onList', (response) =>
@@ -17,17 +17,20 @@ class ListView extends Backbone.View
 
   events: ->
     'click .refresh'  : 'update'
-    'click .h-manage' : 'toggleFavorites'
+    'click .checkbox' : 'toggleFavorites'
+    'click .filter'   : 'toggleFilters'
 
   render: ->
     $(@el).html @template @model.toJSON()
+
     @delegateEvents()
 
-    @$table = @$ '#proxy-list-box'
-    @$hBox  = @$ '.h-box'
+    @$table   = @$ '#proxy-list-box'
+    @$content = @$ '.content-wrapper'
+    @$filters = @$ '.filters'
 
     @addAll()
-    @update() if (!@collection.length and !@model.get 'hCheckbox')
+    @update() if (!@collection.length and !@model.get 'isFavoriteEnabled')
 
     return @
 
@@ -44,7 +47,7 @@ class ListView extends Backbone.View
   addAll: ->
     @$table.empty()
 
-    _.each(@collection.where(favoriteState: @model.get 'hCheckbox'), @addOne, @)
+    _.each(@collection.where(favoriteState: @model.get 'isFavoriteEnabled'), @addOne, @)
 
   onList: (list) ->
     activeElement = @collection.filter (item) -> item.get 'activeState'
@@ -60,10 +63,13 @@ class ListView extends Backbone.View
     @render()
 
   onRefreshProcess: (model, value, options) ->
-    @$hBox.toggleClass 'spinner', value
+    @$content.toggleClass 'spinner', value
 
   toggleFavorites: ->
-    @model.set 'hCheckbox', !@model.get 'hCheckbox'
+    @model.set 'isFavoriteEnabled', !@model.get 'isFavoriteEnabled'
+
+  toggleFilters: ->
+    @$filters.toggle()
 
   onStateChange: (model, value, options) ->
     _.each(@collection.without(model), (proxy) -> proxy.set 'activeState', false) if model.get 'activeState'

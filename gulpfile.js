@@ -1,11 +1,11 @@
 const gulp   = require('gulp');
 const coffee = require('gulp-coffee');
 const concat = require('gulp-concat');
+const sass   = require('gulp-sass');
 
-gulp.task('coffee', function() {
+gulp.task('coffee', () => {
     gulp
         .src([
-            './data/locale/*.coffee',
             './data/coffee/**/*.coffee'
         ])
         .pipe(coffee({
@@ -15,6 +15,16 @@ gulp.task('coffee', function() {
         .pipe(gulp.dest('./data/build'));
 });
 
+gulp.task('sass', () => {
+    gulp
+        .src([
+            './data/sass/**/*.scss'
+        ])
+        .pipe(sass())
+        .pipe(gulp.dest('./data/build'));
+});
+
 gulp.task('default', [
-    'coffee'
+    'coffee',
+    'sass'
 ]);

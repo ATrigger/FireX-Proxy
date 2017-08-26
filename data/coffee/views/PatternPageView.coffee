@@ -1,6 +1,6 @@
 class PatternPageView extends Backbone.View
   events: ->
-    'click .checkbox-square' : 'toggleTemplates'
+    'click .checkbox' : 'toggleTemplates'
 
   id: ->
     'pattern'
@@ -10,7 +10,7 @@ class PatternPageView extends Backbone.View
     @submitSubView = new PatternSubmitView
 
     @listenTo @collection, 'add', @addOne
-    @listenTo @model, 'change:bCheckbox', @onCheckboxChange
+    @listenTo @model, 'change:isBlacklistEnabled', @onCheckboxChange
 
     @collection.fetch()
 
@@ -22,18 +22,19 @@ class PatternPageView extends Backbone.View
 
   render: ->
     $(@el).html @template @model.toJSON()
+
     @submitSubView.setElement(@$ '#pattern-add-subview').render()
 
     @delegateEvents()
 
-    @$listPatterns = @$ '.h-max'
+    @$listPatterns = @$ '.content-wrapper'
 
     @addAll()
 
     return @
 
   toggleTemplates: ->
-    @model.set 'bCheckbox', !@model.get 'bCheckbox'
+    @model.set 'isBlacklistEnabled', !@model.get 'isBlacklistEnabled'
 
   onCheckboxChange: (model, value, options) ->
     addon.port.emit 'toggleTemplate', value
