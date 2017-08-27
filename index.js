@@ -1,12 +1,12 @@
-const { FreeProxyList }   = require('./FreeProxyList.js');
+const { FreeProxyList }   = require('./addon/FreeProxyList.js');
 const { ActionButton }    = require("sdk/ui/button/action");
 const { Panel }           = require("sdk/panel");
-const { Address }         = require('./Address.js');
-const { Connector }       = require('./Connector.js');
-const { TemplateManager } = require('./TemplateManager.js');
-const { FavoriteManager } = require('./FavoriteManager.js');
-const { JsonReader }      = require('./JsonReader.js');
-const { Template }        = require('./Template.js');
+const { Address }         = require('./addon/Address.js');
+const { Connector }       = require('./addon/Connector.js');
+const { TemplateManager } = require('./addon/TemplateManager.js');
+const { FavoriteManager } = require('./addon/FavoriteManager.js');
+const { JsonReader }      = require('./addon/JsonReader.js');
+const { Template }        = require('./addon/Template.js');
 const self                = require('sdk/self');
 
 const panel = Panel({

@@ -2,7 +2,7 @@ class ProxyList extends Backbone.Collection
   constructor: (options) ->
     super options
 
-    @model = ProxyServerModel
+    @model = ProxyStateModel
 
   initialize: ->
     @port = 'favorite'

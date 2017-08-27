@@ -14,7 +14,7 @@ class PatternSubmitView extends Backbone.View
   create: (event) ->
     event.preventDefault()
 
-    patternModel = new PatternModel
+    patternModel = new ProxyStateModel
     patternModel.set 'address', @addressTextarea.val()
 
     Backbone.Validation.bind @,

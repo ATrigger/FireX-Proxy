@@ -1,19 +1,8 @@
-const gulp   = require('gulp');
-const coffee = require('gulp-coffee');
-const concat = require('gulp-concat');
-const sass   = require('gulp-sass');
-
-gulp.task('coffee', () => {
-    gulp
-        .src([
-            './data/coffee/**/*.coffee'
-        ])
-        .pipe(coffee({
-            bare: true
-        }))
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('./data/build'));
-});
+const gulp       = require('gulp'),
+      concat     = require('gulp-concat'),
+      sass       = require('gulp-sass'),
+      babel      = require('gulp-babel'),
+      ngAnnotate = require('gulp-ng-annotate');
 
 gulp.task('sass', () => {
     gulp
@@ -24,7 +13,16 @@ gulp.task('sass', () => {
         .pipe(gulp.dest('./data/build'));
 });
 
+gulp.task('babel', () => {
+    gulp
+        .src('./data/js/**/*.js')
+        .pipe(babel())
+        .pipe(concat('build.js'))
+        .pipe(ngAnnotate())
+        .pipe(gulp.dest('./data/build'));
+});
+
 gulp.task('default', [
-    'coffee',
+    'babel',
     'sass'
 ]);

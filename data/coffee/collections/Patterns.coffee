@@ -2,7 +2,7 @@ class Patterns extends Backbone.Collection
   constructor: (options) ->
     super options
 
-    @model = PatternModel
+    @model = ProxyStateModel
 
   initialize: ->
     @port = 'blacklist'

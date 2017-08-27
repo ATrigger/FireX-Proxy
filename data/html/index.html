@@ -24,31 +24,11 @@
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
-    <div class="right-panel">
-        <i class="filter"></i>
-        <% if (!isFavoriteEnabled) { %>
-        <div class="checkbox"></div>
-        <% } else { %>
-        <div class="checkbox active"></div>
-        <% } %>
-        <%- i18next.t('favorites') %>
-    </div>
-    <div id="proxy-content">
-        <div class="content-wrapper">
-            <div class="filters"></div>
-            <table id="proxy-list-box"></table>
-        </div>
-        <button class="bottom-button refresh"></button>
-    </div>
+
 </script>
 <!-- LIST TEMPLATE -->
 <script type="text/template" id="server-template">
-    <td class="favorite">
-        <div class="checkbox star"></div>
-    </td>
-    <td><%- ipAddress %></td>
-    <td><%- originalProtocol %></td>
-    <td class="country"><%- country %></td>
+
 </script>
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
